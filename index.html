@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎂 Festa 25 Anni 🎂</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/confetti-js/0.0.18/confetti.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #667eea;
+      --secondary: #764ba2;
+      --accent: #f093fb;
+      --text: #303030;
+      --white: #ffffff;
+      --card: rgba(255, 255, 255, 0.96);
+      --shadow: 0 22px 55px rgba(52, 40, 120, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Nunito', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 82% 2%, rgba(240, 147, 251, 0.75), transparent 26%),
+        radial-gradient(circle at 12% 10%, rgba(102, 126, 234, 0.9), transparent 34%),
+        linear-gradient(135deg, #667eea 0%, #764ba2 72%, #f093fb 100%);
+      padding: 1.4rem;
+      overflow-x: hidden;
+    }
+
+    .confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 1000px);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    /* ── TOP ROW: video + hero/cards ── */
+    .top-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      align-items: start;
+    }
+
+    /* Video */
+    .video-card {
+      border-radius: 26px;
+      overflow: hidden;
+      background: #111;
+      border: 4px solid rgba(255, 255, 255, 0.55);
+      box-shadow: var(--shadow);
+      aspect-ratio: 9 / 16;
+      max-height: 520px;
+    }
+
+    .video-card video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Right column */
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* Hero */
+    .hero {
+      color: var(--white);
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.85), rgba(118, 75, 162, 0.85));
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      border-radius: 26px;
+      padding: 1.5rem 1.6rem;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 2px solid rgba(255, 255, 255, 0.22);
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .hero h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1;
+      font-weight: 900;
+      text-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.55;
+      font-weight: 700;
+      opacity: 0.95;
+    }
+
+    /* Info grid */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.85rem;
+    }
+
+    .info-card {
+      min-height: 110px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--white);
+      border-radius: 22px;
+      border: 2px solid rgba(255, 255, 255, 0.22);
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.92), rgba(118, 75, 162, 0.9));
+      box-shadow: 0 16px 34px rgba(52, 40, 120, 0.2);
+      padding: 1rem;
+      gap: 4px;
+    }
+
+    .info-card .emoji { font-size: 1.9rem; line-height: 1; }
+    .info-card .label {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      opacity: 0.9;
+    }
+    .info-card .value,
+    .info-card a.value {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--white);
+      text-decoration: none;
+      line-height: 1.1;
+    }
+
+    .calendar-link {
+      display: inline-block;
+      margin-top: 0.4rem;
+      padding: 0.38rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 900;
+      font-size: 0.8rem;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+      transition: 0.2s ease;
+    }
+    .calendar-link:hover { transform: translateY(-2px); background: var(--white); }
+
+    /* ── BOTTOM CARDS ── */
+    .activity-card,
+    .form-card {
+      background: var(--card);
+      border-radius: 28px;
+      border: 3px solid rgba(255, 255, 255, 0.7);
+      box-shadow: var(--shadow);
+      padding: 1.8rem;
+    }
+
+    .activity-card h2,
+    .form-card h2 {
+      margin: 0 0 1.2rem;
+      color: var(--primary);
+      font-size: clamp(1.5rem, 3.5vw, 2rem);
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .activity-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .activity-list li {
+      border: 3px solid var(--primary);
+      border-radius: 20px;
+      padding: 1rem;
+      font-weight: 900;
+      text-align: center;
+      background: #fff;
+    }
+    .activity-list li::before { content: '🎉 '; }
+
+    form { display: grid; gap: 1.2rem; text-align: left; }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    input[type='text'],
+    textarea {
+      width: 100%;
+      border: 3px solid var(--primary);
+      border-radius: 16px;
+      padding: 0.9rem 1rem;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      background: #fff;
+      transition: 0.2s ease;
+    }
+    input[type='text']:focus,
+    textarea:focus {
+      outline: none;
+      box-shadow: 0 0 0 5px rgba(102, 126, 234, 0.18);
+      transform: translateY(-1px);
+    }
+    textarea { min-height: 110px; resize: vertical; }
+
+    .radio-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+
+    .radio-card {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      min-height: 68px;
+      border: 3px solid var(--primary);
+      border-radius: 16px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 1.05rem;
+      font-weight: 900;
+      transition: 0.2s ease;
+    }
+    .radio-card input { position: absolute; opacity: 0; pointer-events: none; }
+    .fake-radio {
+      position: absolute;
+      left: 1rem;
+      width: 20px;
+      height: 20px;
+      border: 3px solid var(--primary);
+      border-radius: 50%;
+      background: #fff;
+    }
+    .radio-card:has(input:checked) {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(240, 147, 251, 0.16));
+      box-shadow: 0 10px 24px rgba(102, 126, 234, 0.18);
+      transform: translateY(-2px);
+    }
+    .radio-card:has(input:checked) .fake-radio::after {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 0.2rem;
+      border: none;
+      border-radius: 16px;
+      padding: 1rem 1.2rem;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: var(--white);
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 14px 28px rgba(102, 126, 234, 0.32);
+      transition: 0.25s ease;
+    }
+    button:hover { transform: translateY(-3px); box-shadow: 0 18px 38px rgba(118, 75, 162, 0.36); }
+
+    .message-success {
+      display: none;
+      margin-top: 1.2rem;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 16px;
+      background: rgba(46, 204, 113, 0.16);
+      border: 2px solid rgba(46, 204, 113, 0.35);
+      color: #1e7e34;
+      font-weight: 900;
+    }
+
+    /* Floating shapes */
+    .floating-shape {
+      position: fixed;
+      z-index: 0;
+      opacity: 0.35;
+      animation: float 7s ease-in-out infinite;
+      pointer-events: none;
+      font-size: 2.4rem;
+    }
+    .shape-1 { top: 4%; left: 5%; }
+    .shape-2 { top: 5%; right: 12%; animation-delay: 1s; }
+    .shape-3 { bottom: 11%; left: 6%; animation-delay: 2s; }
+    .shape-4 { bottom: 14%; right: 8%; animation-delay: 3s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-18px) rotate(8deg); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .top-row {
+        grid-template-columns: 1fr;
+      }
+      .video-card {
+        aspect-ratio: 9 / 12;
+        max-height: 360px;
+      }
+      .activity-list { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 0.85rem; }
+      .info-grid { grid-template-columns: repeat(2, 1fr); }
+      .radio-grid { grid-template-columns: 1fr; }
+      .activity-card, .form-card { padding: 1.2rem; border-radius: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+  <div class="floating-shape shape-1">🎈</div>
+  <div class="floating-shape shape-2">🎁</div>
+  <div class="floating-shape shape-3">🥂</div>
+  <div class="floating-shape shape-4">🎂</div>
+
+  <main class="page">
+
+    <!-- ── TOP ROW ── -->
+    <div class="top-row animate__animated animate__fadeIn">
+
+      <!-- Video -->
+      <!-- Sostituisci "video-invito.mp4" con il nome del video nella stessa cartella -->
+      <div class="video-card">
+        <video autoplay loop muted playsinline>
+          <source src="video-invito.mp4" type="video/mp4" />
+          Il tuo browser non supporta il video.
+        </video>
+      </div>
+
+      <!-- Hero + Info cards -->
+      <div class="right-col">
+        <header class="hero animate__animated animate__fadeInDown">
+          <div class="hero-badge">🎉 Save the date</div>
+          <h1>Festa 25 Anni!</h1>
+          <p>Un brindisi, due chiacchiere, una fetta di torta e un po' di festeggiamenti insieme. Ti aspetto! ❤️</p>
+        </header>
+
+        <section class="info-grid animate__animated animate__fadeInUp">
+          <div class="info-card">
+            <div class="emoji">📅</div>
+            <div class="label">Data</div>
+            <div class="value">15 Maggio</div>
+            <a id="ics-link" download="festa_25_anni.ics" class="calendar-link">Salva in calendario</a>
+          </div>
+          <div class="info-card">
+            <div class="emoji">🕘</div>
+            <div class="label">Ora</div>
+            <div class="value">21:15/21:30</div>
+          </div>
+          <div class="info-card">
+            <div class="emoji">📍</div>
+            <div class="label">Luogo</div>
+            <a class="value" href="https://www.google.com/maps?q=Via+Giuseppe+Bentivogli+111c,+Bologna" target="_blank" rel="noopener noreferrer">Bar Tito</a>
+          </div>
+          <div class="info-card">
+            <div class="emoji">🍾</div>
+            <div class="label">Per</div>
+            <div class="value">Brindare!</div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ── ATTIVITÀ ── -->
+    <section class="activity-card animate__animated animate__fadeInUp animate__delay-1s">
+      <h2>Cosa si fa?</h2>
+      <ul class="activity-list">
+        <li>Brindisi e chiacchiere al Bar Tito</li>
+        <li>A seguire: torta e festeggiamenti a casa mia!</li>
+      </ul>
+    </section>
+
+    <!-- ── FORM RSVP ── -->
+    <section class="form-card animate__animated animate__fadeInUp animate__delay-1s">
+      <h2>Conferma la tua partecipazione</h2>
+
+      <form id="rsvp-form">
+        <div class="form-group">
+          <label for="nome">Nome e Cognome *</label>
+          <input id="nome" type="text" name="nome" placeholder="Es. Mario Rossi" required />
+        </div>
+
+        <div class="form-group">
+          <label>Partecipi? *</label>
+          <div class="radio-grid">
+            <label class="radio-card">
+              <input type="radio" name="conferma" value="Sì, ci sarò! ✅" required />
+              <span class="fake-radio"></span>
+              <span>Sì! ✅</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="conferma" value="No, purtroppo no ❌" required />
+              <span class="fake-radio"></span>
+              <span>No ❌</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="messaggio">Scrivimi qualcosa se vuoi</label>
+          <textarea id="messaggio" name="messaggio" placeholder="Lascia un messaggio, una dedica o una nota 🎈"></textarea>
+        </div>
+
+        <input type="hidden" name="_captcha" value="false" />
+
+        <button type="submit" id="submit-btn">Invia risposta 🎉</button>
+      </form>
+
+      <div id="success-message" class="message-success">
+        Grazie per la tua risposta! Non vedo l'ora di festeggiare insieme! 🎉
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function launchConfetti(max, duration) {
+      const confetti = new ConfettiGenerator({
+        target: 'confetti-canvas',
+        max: max,
+        size: 2,
+        animate: true,
+        props: ['circle', 'square', 'triangle', 'line'],
+        colors: [[102, 126, 234], [118, 75, 162], [240, 147, 251], [255, 255, 255]],
+        clock: 50
+      });
+      confetti.render();
+      setTimeout(() => confetti.clear(), duration);
+    }
+
+    window.addEventListener('load', () => launchConfetti(90, 3000));
+
+    document.getElementById('rsvp-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      const btn = document.getElementById('submit-btn');
+
+      btn.disabled = true;
+      btn.textContent = 'Invio in corso...';
+
+      fetch('https://formsubmit.co/ajax/lorubio.00@gmail.com', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      })
+      .then(r => {
+        if (r.ok) {
+          document.getElementById('success-message').style.display = 'block';
+          form.reset();
+          launchConfetti(130, 2600);
+        } else {
+          alert("Errore nell'invio. Riprova più tardi.");
+        }
+      })
+      .catch(() => alert('Errore di rete. Controlla la connessione.'))
+      .finally(() => {
+        btn.disabled = false;
+        btn.textContent = 'Invia risposta 🎉';
+      });
+    });
+
+    document.getElementById('submit-btn').addEventListener('mouseover', () => launchConfetti(24, 550));
+
+    // Genera il file .ics in automatico
+    (function() {
+      const ics = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Festa25Anni//IT',
+        'BEGIN:VEVENT',
+        'UID:festa25anni-2026@lorubio',
+        'DTSTART:20260515T211500',
+        'DTEND:20260516T000000',
+        'SUMMARY:Festa 25 Anni! 🎉',
+        'DESCRIPTION:Un brindisi\, due chiacchiere\, una fetta di torta e un po\' di festeggiamenti insieme!',
+        'LOCATION:Bar Tito\, Via Giuseppe Bentivogli 111c\, Bologna',
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ].join('\r\n');
+
+      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      document.getElementById('ics-link').href = url;
+    })();
+  </script>
+</body>
+</html>
